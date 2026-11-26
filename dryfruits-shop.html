@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nutri Bazaar – Fresh Dry Fruits</title>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pista:#7BC043; --apricot:#FF9B3D; --fig:#6B2D8B; --berry:#E8336D;
+  --date:#5A2E1A; --almond:#FFF4DC; --sun:#FFD23F; --ink:#2A1608;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--almond);color:var(--ink);line-height:1.5}
+h1,h2,h3,.logo{font-family:'Bagel Fat One','Trebuchet MS',sans-serif;font-weight:400}
+button{font:inherit;cursor:pointer;border:0}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--fig);outline-offset:2px}
+
+/* header */
+header{position:sticky;top:0;z-index:20;background:var(--fig);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:12px 5%;gap:12px;flex-wrap:wrap}
+.logo{font-size:1.7rem;color:var(--sun)}
+.nav{display:flex;gap:10px;align-items:center}
+.btn{padding:10px 18px;border-radius:999px;font-weight:700;transition:transform .15s}
+.btn:active{transform:scale(.96)}
+.btn-sun{background:var(--sun);color:var(--ink)}
+.btn-pista{background:var(--pista);color:var(--ink)}
+.btn-berry{background:var(--berry);color:#fff}
+.btn-ghost{background:transparent;color:#fff;border:2px solid #fff}
+.badge{background:var(--berry);color:#fff;border-radius:999px;padding:1px 8px;margin-left:6px;font-size:.85rem}
+
+/* hero */
+.hero{background:var(--apricot);padding:60px 5% 90px;position:relative;overflow:hidden}
+.hero h1{font-size:clamp(2.4rem,7vw,5rem);line-height:1.05;max-width:760px;color:var(--ink)}
+.hero p{max-width:520px;margin:18px 0 26px;font-size:1.1rem}
+.blob{position:absolute;border-radius:50%;opacity:.9}
+.b1{width:260px;height:260px;background:var(--berry);right:-60px;top:-60px}
+.b2{width:160px;height:160px;background:var(--pista);right:18%;bottom:-50px}
+.b3{width:90px;height:90px;background:var(--sun);right:8%;top:45%}
+.hero .emoji{position:absolute;right:6%;bottom:30px;font-size:clamp(5rem,14vw,10rem);filter:drop-shadow(0 8px 0 rgba(0,0,0,.15))}
+.wave{height:36px;background:var(--almond);margin-top:-36px;position:relative;border-radius:50% 50% 0 0/100% 100% 0 0}
+
+/* shop */
+main{padding:10px 5% 60px}
+.section-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin:24px 0}
+.section-head h2{font-size:2rem;color:var(--fig)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px}
+.card{border-radius:26px;padding:20px;color:#fff;position:relative;display:flex;flex-direction:column;gap:8px;box-shadow:0 6px 0 rgba(0,0,0,.18)}
+.card.light{color:var(--ink)}
+.card .icon{font-size:3.6rem;text-align:center;background:rgba(255,255,255,.25);border-radius:20px;padding:10px}
+.card h3{font-size:1.4rem}
+.card .desc{font-size:.9rem;opacity:.95;min-height:2.6em}
+.price{font-weight:700;font-size:1.15rem}
+.row{display:flex;gap:8px;align-items:center}
+select{padding:8px 10px;border-radius:12px;border:2px solid rgba(0,0,0,.15);background:#fff;color:var(--ink);font:inherit;flex:1}
+.card .btn{background:var(--ink);color:#fff;width:100%;border-radius:14px}
+.del{position:absolute;top:10px;right:10px;background:#fff;color:var(--berry);font-weight:700;width:34px;height:34px;border-radius:50%;display:none}
+.manage .del{display:block}
+
+/* add form */
+.panel{background:#fff;border-radius:26px;padding:22px;margin-bottom:26px;display:none;border:4px solid var(--pista)}
+.manage .panel{display:block}
+.panel h3{color:var(--fig);margin-bottom:12px;font-size:1.4rem}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end}
+label{display:flex;flex-direction:column;font-size:.85rem;font-weight:700;gap:4px}
+input{padding:10px 12px;border-radius:12px;border:2px solid #ddd;font:inherit;width:100%}
+
+/* cart drawer */
+.overlay{position:fixed;inset:0;background:rgba(42,22,8,.55);display:none;z-index:30}
+.overlay.open{display:block}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(420px,100%);background:var(--almond);z-index:31;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.drawer-head{background:var(--berry);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
+.drawer-head h2{font-size:1.5rem}
+.close{background:#fff;color:var(--berry);width:36px;height:36px;border-radius:50%;font-weight:700}
+.items{flex:1;overflow:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+.item{background:#fff;border-radius:18px;padding:12px;display:flex;gap:12px;align-items:center;border-left:8px solid var(--c)}
+.item .ic{font-size:2rem}
+.item .info{flex:1}
+.item small{color:#6b5a4a}
+.qty{display:flex;align-items:center;gap:6px;margin-top:4px}
+.qty button{width:28px;height:28px;border-radius:50%;background:var(--sun);font-weight:700}
+.rm{background:none;color:var(--berry);font-weight:700;font-size:.85rem;text-decoration:underline}
+.empty{text-align:center;padding:40px 10px;color:#6b5a4a}
+.foot{padding:16px 20px;border-top:3px dashed var(--apricot);background:#fff}
+.total{display:flex;justify-content:space-between;font-weight:700;font-size:1.2rem;margin-bottom:10px}
+.foot .btn{width:100%}
+
+/* checkout modal */
+.modal{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(42,22,8,.6)}
+.modal.open{display:flex}
+.box{background:#fff;border-radius:28px;padding:26px;width:min(460px,100%);border-top:12px solid var(--pista);max-height:92vh;overflow:auto}
+.box h2{color:var(--fig);margin-bottom:12px}
+.box label{margin-bottom:10px}
+.box .btn{width:100%;margin-top:6px}
+.done{text-align:center}
+.done .big{font-size:4rem}
+footer{background:var(--date);color:var(--almond);text-align:center;padding:26px 5%}
+footer b{color:var(--sun)}
+@media (prefers-reduced-motion:reduce){.drawer{transition:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🌰 Nutri Bazaar</div>
+  <div class="nav">
+    <button class="btn btn-ghost" id="manageBtn">Manage items</button>
+    <button class="btn btn-sun" id="cartBtn">Cart<span class="badge" id="count">0</span></button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <h1>Sun-dried goodness, packed fresh.</h1>
+  <p>Almonds, cashews, dates, figs and more, sorted by hand and packed in the weight you choose.</p>
+  <button class="btn btn-berry" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">Shop dry fruits</button>
+  <div class="emoji">🥜</div>
+</section>
+<div class="wave"></div>
+
+<main id="shop">
+  <div class="section-head"><h2>Our dry fruits</h2></div>
+
+  <div class="panel" id="addPanel">
+    <h3>Add a new item</h3>
+    <div class="form">
+      <label>Name<input id="nName" placeholder="e.g. Walnuts"></label>
+      <label>Price per 250 g (₹)<input id="nPrice" type="number" min="1" placeholder="220"></label>
+      <label>Emoji<input id="nIcon" maxlength="4" placeholder="🌰"></label>
+      <label>Card colour<input id="nColor" type="color" value="#E8336D"></label>
+      <label>Short description<input id="nDesc" placeholder="Crunchy and rich"></label>
+      <button class="btn btn-pista" id="addBtn">Add item</button>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer><b>Nutri Bazaar</b> · Free delivery above ₹999 · Call us: +91 00000 00000</footer>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-label="Shopping cart">
+  <div class="drawer-head"><h2>Your cart</h2><button class="close" id="closeCart" aria-label="Close cart">✕</button></div>
+  <div class="items" id="items"></div>
+  <div class="foot">
+    <div class="total"><span>Total</span><span id="total">₹0</span></div>
+    <button class="btn btn-pista" id="checkoutBtn">Checkout</button>
+  </div>
+</aside>
+
+<div class="modal" id="modal">
+  <div class="box" id="modalBox"></div>
+</div>
+
+<script>
+const DEFAULTS=[
+ {id:1,name:'Almonds',icon:'🌰',price:240,color:'#E8336D',desc:'Crisp California badam, rich in vitamin E.'},
+ {id:2,name:'Cashews',icon:'🥜',price:260,color:'#FF9B3D',desc:'Creamy, whole W320 kaju.'},
+ {id:3,name:'Pistachios',icon:'🟢',price:340,color:'#7BC043',desc:'Lightly roasted, salted shells.'},
+ {id:4,name:'Raisins',icon:'🍇',price:120,color:'#6B2D8B',desc:'Sweet seedless kishmish.'},
+ {id:5,name:'Dates',icon:'🌴',price:150,color:'#5A2E1A',desc:'Soft, sticky Medjool-style khajoor.'},
+ {id:6,name:'Figs',icon:'🍑',price:280,color:'#B5367A',desc:'Chewy anjeer from Afghan orchards.'},
+ {id:7,name:'Apricots',icon:'🧡',price:200,color:'#F26B21',desc:'Tangy, sun-dried khubani.'},
+ {id:8,name:'Walnuts',icon:'🧠',price:220,color:'#2E8B8B',desc:'Kashmiri akhrot, brain-food crunch.'}
+];
+const WEIGHTS={'250':1,'500':1.95,'1000':3.8}; // price multipliers
+const WLABEL={'250':'250 g','500':'500 g','1000':'1 kg'};
+
+let products=load('products',DEFAULTS), cart=load('cart',[]);
+function load(k,d){try{const v=JSON.parse(localStorage.getItem('nb_'+k));return Array.isArray(v)?v:d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem('nb_'+k,JSON.stringify(v))}catch(e){}}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+const priceFor=(p,w)=>p.price*WEIGHTS[w];
+function isLight(hex){const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255;return (r*299+g*587+b*114)/1000>170}
+
+function renderProducts(){
+  if(!products.length){$('grid').innerHTML='<p class="empty">No items yet. Use “Manage items” to add your first dry fruit.</p>';return}
+  $('grid').innerHTML=products.map(p=>`
+    <div class="card ${isLight(p.color)?'light':''}" style="background:${esc(p.color)}">
+      <button class="del" data-del="${p.id}" aria-label="Delete ${esc(p.name)}">✕</button>
+      <div class="icon">${esc(p.icon)}</div>
+      <h3>${esc(p.name)}</h3>
+      <div class="desc">${esc(p.desc)}</div>
+      <div class="price" id="pr${p.id}">${money(p.price)}</div>
+      <div class="row">
+        <select id="w${p.id}" data-w="${p.id}" aria-label="Weight">
+          ${Object.keys(WEIGHTS).map(w=>`<option value="${w}">${WLABEL[w]}</option>`).join('')}
+        </select>
+      </div>
+      <button class="btn" data-add="${p.id}">Add to cart</button>
+    </div>`).join('');
+}
+
+function renderCart(){
+  const n=cart.reduce((s,i)=>s+i.qty,0);
+  $('count').textContent=n;
+  if(!cart.length){$('items').innerHTML='<div class="empty">🛍️<br>Your cart is empty.<br>Add some dry fruits to get started.</div>';$('total').textContent='₹0';return}
+  $('items').innerHTML=cart.map((i,idx)=>{
+    const p=products.find(x=>x.id===i.id)||i.snap;
+    return `<div class="item" style="--c:${esc(p.color)}">
+      <div class="ic">${esc(p.icon)}</div>
+      <div class="info"><b>${esc(p.name)}</b> <small>${WLABEL[i.w]}</small><br>
+        <small>${money(priceFor(p,i.w))} each</small>
+        <div class="qty"><button data-q="${idx}" data-d="-1" aria-label="Less">−</button><b>${i.qty}</b><button data-q="${idx}" data-d="1" aria-label="More">+</button></div>
+      </div>
+      <div style="text-align:right"><b>${money(priceFor(p,i.w)*i.qty)}</b><br><button class="rm" data-rm="${idx}">Remove</button></div>
+    </div>`}).join('');
+  $('total').textContent=money(cartTotal());
+}
+function cartTotal(){return cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id)||i.snap;return s+priceFor(p,i.w)*i.qty},0)}
+
+function openCart(o){$('drawer').classList.toggle('open',o);$('overlay').classList.toggle('open',o)}
+
+// events
+$('grid').addEventListener('click',e=>{
+  const a=e.target.closest('[data-add]'),d=e.target.closest('[data-del]');
+  if(a){
+    const id=+a.dataset.add,w=$('w'+id).value,p=products.find(x=>x.id===id);
+    const ex=cart.find(i=>i.id===id&&i.w===w);
+    if(ex)ex.qty++;else cart.push({id,w,qty:1,snap:p});
+    save('cart',cart);renderCart();openCart(true);
+  }
+  if(d){
+    const id=+d.dataset.del,p=products.find(x=>x.id===id);
+    if(confirm('Delete '+p.name+' from the shop?')){
+      products=products.filter(x=>x.id!==id);
+      cart=cart.filter(i=>i.id!==id);
+      save('products',products);save('cart',cart);renderProducts();renderCart();
+    }
+  }
+});
+$('grid').addEventListener('change',e=>{
+  const s=e.target.closest('[data-w]');
+  if(s){const p=products.find(x=>x.id===+s.dataset.w);$('pr'+p.id).textContent=money(priceFor(p,s.value))}
+});
+$('items').addEventListener('click',e=>{
+  const q=e.target.closest('[data-q]'),r=e.target.closest('[data-rm]');
+  if(q){const i=cart[+q.dataset.q];i.qty+=+q.dataset.d;if(i.qty<1)cart.splice(+q.dataset.q,1)}
+  if(r)cart.splice(+r.dataset.rm,1);
+  if(q||r){save('cart',cart);renderCart()}
+});
+$('cartBtn').onclick=()=>openCart(true);
+$('closeCart').onclick=$('overlay').onclick=()=>openCart(false);
+$('manageBtn').onclick=()=>{
+  const on=document.body.classList.toggle('manage');
+  $('manageBtn').textContent=on?'Done managing':'Manage items';
+};
+$('addBtn').onclick=()=>{
+  const name=$('nName').value.trim(),price=+$('nPrice').value;
+  if(!name||!(price>0)){alert('Please enter a name and a price greater than 0.');return}
+  products.push({id:Date.now(),name,price,icon:$('nIcon').value.trim()||'🌰',color:$('nColor').value,desc:$('nDesc').value.trim()||'Fresh and crunchy.'});
+  save('products',products);renderProducts();
+  ['nName','nPrice','nIcon','nDesc'].forEach(i=>$(i).value='');
+};
+
+// checkout
+$('checkoutBtn').onclick=()=>{
+  if(!cart.length){alert('Your cart is empty. Add an item first.');return}
+  openCart(false);
+  $('modalBox').innerHTML=`<h2>Delivery details</h2>
+    <label>Full name<input id="cName"></label>
+    <label>Phone<input id="cPhone" type="tel"></label>
+    <label>Address<input id="cAddr"></label>
+    <label>Payment<select id="cPay"><option>Cash on delivery</option><option>UPI on delivery</option></select></label>
+    <div class="total"><span>Total</span><span>${money(cartTotal())}</span></div>
+    <button class="btn btn-berry" id="placeBtn">Place order</button>
+    <button class="btn btn-ghost" style="color:var(--ink);border-color:var(--ink)" id="cancelBtn">Back to shop</button>`;
+  $('modal').classList.add('open');
+  $('cancelBtn').onclick=()=>$('modal').classList.remove('open');
+  $('placeBtn').onclick=()=>{
+    if(!$('cName').value.trim()||!$('cPhone').value.trim()||!$('cAddr').value.trim()){alert('Please fill in your name, phone and address.');return}
+    const no='NB'+Math.floor(10000+Math.random()*90000),name=esc($('cName').value.trim());
+    cart=[];save('cart',cart);renderCart();
+    $('modalBox').innerHTML=`<div class="done"><div class="big">🎉</div><h2>Order placed!</h2>
+      <p>Thank you, ${name}. Your order <b>${no}</b> will reach you in 2–3 days.</p>
+      <button class="btn btn-pista" id="okBtn">Keep shopping</button></div>`;
+    $('okBtn').onclick=()=>$('modal').classList.remove('open');
+  };
+};
+
+renderProducts();renderCart();
+</script>
+</body>
+</html>
